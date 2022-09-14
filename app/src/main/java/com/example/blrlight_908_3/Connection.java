@@ -31,10 +31,6 @@ public class Connection extends AppCompatActivity {
     ImageView ble_state;
     boolean isSelected = false;
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-    private static final int REQUEST_ENABLE_BT = 1;
-    private static final int REQUEST_DISABLE_BT = 2;
-    //BluetoothManager bluetoothManager= (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-    //BluetoothAdapter bluetoothAdapter=bluetoothManager.getAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +39,12 @@ public class Connection extends AppCompatActivity {
         ble_switch = findViewById(R.id.switch1);
         ble_state = findViewById(R.id.imageView);
 
-        ble_state_init();
-//        ble_state_switch();
-
-
+        ble_state_refresh();
         ActionBar acb = getSupportActionBar();
         if (acb != null) {
             acb.hide();
         }
+
 
         bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.bluetooth);
@@ -79,15 +73,9 @@ public class Connection extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (isSelected) {
                     if (!bluetoothAdapter.isEnabled()) {
-                        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                        //startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-                        startActivity(enableBtIntent);
-//                      bluetoothAdapter.enable();
+
                     }
-                }else {
-                    Intent disableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                    startActivityForResult(disableBtIntent, REQUEST_DISABLE_BT);
-                    //bluetoothAdapter.disable();
+                } else {
 
                 }
                 Log.d(TAG, "onClick:2 ");
@@ -96,7 +84,6 @@ public class Connection extends AppCompatActivity {
 
 
     }
-
 
 
     private void startblue() {
@@ -119,12 +106,14 @@ public class Connection extends AppCompatActivity {
 
     }
 
-    public void ble_state_init() {
+    public void ble_state_refresh() {
         if (bluetoothAdapter.isEnabled()) {
             ble_switch.setChecked(true);
-            isSelected=true;
             ble_state.setImageResource(R.drawable.ble_on);
-        }else ble_state.setImageResource(R.drawable.ble_off);
+        } else {
+            ble_state.setImageResource(R.drawable.ble_off);
+            ble_switch.setChecked(false);
+        }
     }
 
 

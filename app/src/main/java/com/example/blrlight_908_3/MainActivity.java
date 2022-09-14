@@ -16,8 +16,7 @@ import com.google.android.material.navigation.NavigationBarView;
 public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
-    BlueTooth_Set blueTooth_set = new BlueTooth_Set();
-    public static final String TAG="MainActivity";
+    public static final String TAG = "MainActivity";
 
 
     @Override
@@ -75,8 +74,10 @@ public class MainActivity extends AppCompatActivity {
         this.finish();
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String result = data.getExtras().getString("result");//得到新Activity 关闭后返回的数据
-        Log.i(TAG, result);}
+        Log.i(TAG, result);
+    }
 }
