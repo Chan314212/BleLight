@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
             acb.hide();
         }
 
+
+
         bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.operation);
 
