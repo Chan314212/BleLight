@@ -38,6 +38,7 @@ public class Connection extends AppCompatActivity {
     Switch ble_switch;
     ImageView ble_state;
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    private static final int REQUEST_OPEN_BT_CODE=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,14 +85,22 @@ public class Connection extends AppCompatActivity {
             }
         });
         ble_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 BleManager bleManager = new BleManager();
+                BluetoothAdapter adapter=BluetoothAdapter.getDefaultAdapter();
                 if (ble_switch.isChecked()) {
-                    bleManager.enableBluetooth();
+//                    bleManager.enableBluetooth();
+
+                    if (!adapter.isEnabled()) //未打开蓝牙，才需要打开蓝牙
+                    {
+                        Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                        startActivityForResult(intent, REQUEST_OPEN_BT_CODE);}
 
                 } else {
-                    bleManager.disableBluetooth();
+//                    bleManager.disableBluetooth();
+                    //adapter.disable()
 
                 }
 
