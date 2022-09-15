@@ -25,10 +25,9 @@ import android.widget.ImageView;
 import android.widget.Switch;
 
 
+import com.clj.fastble.BleManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.inuker.bluetooth.library.BluetoothClient;
-import com.inuker.bluetooth.library.search.SearchRequest;
 
 import java.security.acl.Permission;
 
@@ -46,15 +45,13 @@ public class Connection extends AppCompatActivity {
         setContentView(R.layout.activity_connection);
         ble_switch = findViewById(R.id.switch1);
         ble_state = findViewById(R.id.imageView);
-        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-
-        }
-        BluetoothClient client=new BluetoothClient(this);
-        SearchRequest request = new SearchRequest.Builder()
-                .searchBluetoothLeDevice(3000, 3)   // 先扫BLE设备3次，每次3s
-                .searchBluetoothClassicDevice(5000) // 再扫经典蓝牙5s
-                .searchBluetoothLeDevice(2000)      // 再扫BLE设备2s
-                .build();
+        BleManager.getInstance().init(getApplication());
+        BleManager.getInstance()
+                .enableLog(true)
+                .setReConnectCount(1, 5000)
+                .setSplitWriteNum(20)
+                .setConnectOverTime(10000)
+                .setOperateTimeout(5000);
 
 
         ble_state_refresh();
@@ -62,7 +59,6 @@ public class Connection extends AppCompatActivity {
         if (acb != null) {
             acb.hide();
         }
-
 
 
         bottomNavigationView = findViewById(R.id.bottom_nav);
@@ -90,13 +86,12 @@ public class Connection extends AppCompatActivity {
         ble_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
+                BleManager bleManager = new BleManager();
                 if (ble_switch.isChecked()) {
-                    if (!bluetoothAdapter.isEnabled()) {
-client.openBluetooth();
-                    }
+                    bleManager.enableBluetooth();
+
                 } else {
-                    client.closeBluetooth();
+                    bleManager.disableBluetooth();
 
                 }
 
@@ -136,8 +131,6 @@ client.openBluetooth();
             ble_switch.setChecked(false);
         }
     }
-
-
 
 
 }
